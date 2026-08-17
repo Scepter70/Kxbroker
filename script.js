@@ -1,7 +1,7 @@
 // script.js — Supabase auth + profile helpers for Kxbroker frontend
-// IMPORTANT: replace the placeholders below with your project's values
-const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co'   // e.g. https://abcd1234.supabase.co
-const SUPABASE_ANON_KEY = 'YOUR_ANON_PUBLIC_KEY'            // e.g. sbp_...
+// WARNING: Never put your service/secret key in client-side code. Only the public/publishable key goes here.
+const SUPABASE_URL = 'https://xzuhppufqsdenxunknhk.supabase.co'
+const SUPABASE_ANON_KEY = 'sb_publishable_rp1rKncynRmP-oSHRdGXLg_G3sEkXZ9' // publishable (anon) key
 
 // Load Supabase client dynamically (works in module script)
 async function loadSupabase() {
@@ -16,8 +16,6 @@ loadSupabase().then((c) => { supabase = c })
 function showMessage(msg) {
   console.log('[Auth]', msg)
   // keep UX simple here; change to nicer UI as needed
-  // uncomment next line to show alerts:
-  // alert(msg)
 }
 
 /* --- Register flow --- */
@@ -39,8 +37,6 @@ document.getElementById('registerForm')?.addEventListener('submit', async (e) =>
     return
   }
 
-  // If signUpData.user exists, create a profile row for them.
-  // Note: the anon key can insert rows only if RLS policies permit it (we'll rely on policies that allow user to insert their own profile).
   const user = signUpData.user
   if (user) {
     try {
@@ -48,7 +44,6 @@ document.getElementById('registerForm')?.addEventListener('submit', async (e) =>
         .from('profiles')
         .insert([{ id: user.id, full_name: '', role: 'customer' }])
       if (profileError) {
-        // If it fails due to RLS or other reason, log it — profile can be created server-side later.
         console.warn('profiles insert error:', profileError)
       } else {
         showMessage('Profile row created (or attempted).')
@@ -70,7 +65,6 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
   if (!email || !password) { showMessage('Email and password required'); return }
 
   showMessage('Signing in...')
-  // signInWithPassword for current supabase client API
   const { data: loginData, error: loginError } = await supabase.auth.signInWithPassword({
     email,
     password
@@ -87,7 +81,6 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
     return
   }
 
-  // Retrieve profile to get role
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('role, full_name')
@@ -95,7 +88,6 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
     .single()
 
   if (profileError) {
-    // If profile missing, user is probably not yet seeded; default to customer
     console.warn('Could not load profile:', profileError)
     redirectAfterLogin('customer')
     return
@@ -106,10 +98,8 @@ document.getElementById('loginForm')?.addEventListener('submit', async (e) => {
 
 function redirectAfterLogin(role) {
   if (role === 'admin') {
-    // create an admin.html page or admin area
     window.location.href = '/admin.html'
   } else {
-    // user dashboard (create dashboard.html)
     window.location.href = '/dashboard.html'
   }
 }
@@ -118,7 +108,6 @@ function redirectAfterLogin(role) {
 async function signOut() {
   if (!supabase) return
   await supabase.auth.signOut()
-  localStorage.removeItem('sb-logged-in')
   window.location.href = '/'
 }
 
@@ -128,15 +117,13 @@ async function checkSessionOnLoad() {
   const { data } = await supabase.auth.getSession()
   const session = data?.session
   if (session?.user) {
-    // session exists; optionally fetch profile and show logged-in UI
     const userId = session.user.id
     const { data: profile } = await supabase.from('profiles').select('role').eq('id', userId).single().catch(() => ({}))
     if (profile?.role === 'admin') {
-      // optionally show admin nav link, etc.
       console.log('Admin is logged in')
     } else {
       console.log('Customer logged in')
     }
   }
 }
-setTimeout(checkSessionOnLoad, 800) // wait briefly for client to load
+setTimeout(checkSessionOnLoad, 800)
