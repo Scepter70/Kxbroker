@@ -288,6 +288,23 @@
       <h2 id="cta-heading">Ready to Invest?</h2>
       <p>Register and join the Capital Vaults Community</p>
       <a href="#plans" class="sv-btn">Get Started Today</a>
+
+      <!-- Authentication forms: register and login -->
+      <div class="auth-forms" style="margin-top:24px; display:flex; gap:24px; flex-wrap:wrap;">
+        <form id="registerForm" style="background:#0b1220;padding:16px;border-radius:8px;min-width:260px;">
+          <h3 style="margin-top:0;color:#fff">Register</h3>
+          <input id="regEmail" name="email" type="email" placeholder="Email" required style="width:100%;padding:8px;margin-bottom:8px;">
+          <input id="regPassword" name="password" type="password" placeholder="Password" required style="width:100%;padding:8px;margin-bottom:8px;">
+          <button type="submit" style="width:100%;padding:10px;background:#1fb6ff;border:none;color:#04263b;border-radius:6px;">Register</button>
+        </form>
+
+        <form id="loginForm" style="background:#0b1220;padding:16px;border-radius:8px;min-width:260px;">
+          <h3 style="margin-top:0;color:#fff">Login</h3>
+          <input id="logEmail" name="email" type="email" placeholder="Email" required style="width:100%;padding:8px;margin-bottom:8px;">
+          <input id="logPassword" name="password" type="password" placeholder="Password" required style="width:100%;padding:8px;margin-bottom:8px;">
+          <button type="submit" style="width:100%;padding:10px;background:#1fb6ff;border:none;color:#04263b;border-radius:6px;">Login</button>
+        </form>
+      </div>
     </section>
   </main>
 
@@ -296,6 +313,6 @@
     <p>© 2026 Kxbroker. 40 Bank Street, Canary Wharf, London E14 5NR, United Kingdom. All rights reserved.</p>
   </footer>
 
-  <script src="script.js" defer></script>
+  <script type="module" src="script.js" defer></script>
 </body>
 </html>
