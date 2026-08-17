@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dashboard — Kxbroker</title>
+  <meta name="description" content="User dashboard for Kxbroker">
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header style="padding:16px;background:#04263b;color:#1fb6ff;">
+    <a href="/" style="color:#1fb6ff;text-decoration:none;font-weight:600;">← Back to site</a>
+  </header>
+
+  <main style="padding:24px;">
+    <h1>Your Dashboard</h1>
+    <p>Welcome — this is the basic dashboard for signed-in customers.</p>
+    <section style="margin-top:16px;">
+      <button id="signOutBtn" style="padding:10px 16px;background:#1fb6ff;border:none;border-radius:6px;color:#04263b;">Sign out</button>
+    </section>
+
+    <section id="dashboardContent" style="margin-top:24px;">
+      <h2>Account</h2>
+      <p>Show account info, active plans, and actions here.</p>
+    </section>
+  </main>
+
+  <script type="module" src="/script.js" defer></script>
+  <script>
+    document.getElementById('signOutBtn').addEventListener('click', () => {
+      if (typeof signOut === 'function') {
+        signOut()
+      } else {
+        window.location.href = '/'
+      }
+    })
+  </script>
+</body>
+</html>
